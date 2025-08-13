@@ -4,7 +4,7 @@ import re
 from types import GeneratorType
 from typing import Dict, List, Optional
 
-from .types import Status, Song
+from .types import Song, Status
 
 log = logging.getLogger(__name__)
 

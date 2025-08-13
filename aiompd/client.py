@@ -1,13 +1,18 @@
 import asyncio
 import logging
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
-from .protocol import Protocol
+from .helpers import (
+    ExceptionQueueItem,
+    lock,
+    lock_and_status,
+    song_from_raw,
+    songs_list_from_raw,
+    status_from_raw,
+)
 from .playlists import Playlists
-from .helpers import lock, lock_and_status
-from .helpers import status_from_raw, songs_list_from_raw, song_from_raw
-from .helpers import ExceptionQueueItem
-from .types import Status, Song, Version
+from .protocol import Protocol
+from .types import Song, Status, Version
 
 log = logging.getLogger(__name__)
 
@@ -135,7 +140,7 @@ class Client:
         return song_from_raw(parsed)
 
     @lock
-    async def play(self, *, track: int=None, id: int=None):
+    async def play(self, *, track: int | None = None, id: int | None = None):
         """ Play song from playlist.
 
         :param int track: track number
@@ -221,7 +226,7 @@ class Client:
         await self._send_command('previous')
 
     @lock
-    async def shuffle(self, start: int=None, end: int=None):
+    async def shuffle(self, start: int | None = None, end: int | None = None):
         """ Shuffle current playlist.
         """
         if start is None and end is None:
@@ -246,7 +251,7 @@ class Client:
         await self._send_command('add', uri)
 
     @lock
-    async def delete(self, *, id: int=None, pos: int=None):
+    async def delete(self, *, id: int | None = None, pos: int | None = None):
         """ Delete song from playlist.
         """
         assert id is None or pos is None

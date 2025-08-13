@@ -1,23 +1,53 @@
-from collections import namedtuple
+from typing import NamedTuple
 
 
-Version = namedtuple('Version', ['major', 'minor', 'patch'])
+class Version(NamedTuple):
+    """Represents the version of the MPD server."""
 
-Status = namedtuple('Status', [
-    'state', 'time', 'elapsed', 'bitrate',  # str
-    'mixrampdb', 'mixrampdelay', 'audio', 'error',  # str
-    'repeat', 'random', 'single', 'consume',  # bool
-    'volume', 'playlist', 'playlistlength', 'song', 'songid',  # int
-    'nextsong', 'nextsongid', 'duration', 'xfade', 'updating_db',  # int
-])
-
-Song = namedtuple('Song', [
-    'file', 'title', 'name',  # str
-    'pos', 'id',  # int
-])
+    major: int
+    minor: int
+    patch: int
 
 
-Playlist = namedtuple('Playlist', [
-    'name',  # str
-    'songs',  # list
-])
+class Status(NamedTuple):
+    """Represents the status of the MPD server."""
+
+    state: str
+    time: int
+    elapsed: int
+    bitrate: str
+    mixrampdb: str
+    mixrampdelay: str
+    audio: str
+    error: str
+    repeat: bool
+    random: bool
+    single: bool
+    consume: bool
+    volume: int
+    playlist: int
+    playlistlength: int
+    song: int
+    songid: int
+    nextsong: int
+    nextsongid: int
+    duration: int
+    xfade: int
+    updating_db: int
+
+
+class Song(NamedTuple):
+    """Represents a song in the MPD server."""
+
+    file: str
+    title: str
+    name: str
+    pos: int
+    id: int
+
+
+class Playlist(NamedTuple):
+    """Represents a playlist in the MPD server."""
+
+    name: str
+    songs: list[Song]
