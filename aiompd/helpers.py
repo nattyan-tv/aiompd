@@ -1,7 +1,6 @@
 import asyncio
 import logging
 import re
-from types import GeneratorType
 from typing import Dict, List, Optional
 
 from .types import Song, Status
@@ -11,32 +10,30 @@ log = logging.getLogger(__name__)
 
 def lock(func):
     # lock clinet method
-    @asyncio.coroutine
-    def wrapper(self, *args, **kwargs):
+    async def wrapper(self, *args, **kwargs):
         if self._transport is None:
             log.error("connection closed")
             raise RuntimeError("connection closed")
 
-        with (yield from self._lock):
-            return (yield from (func(self, *args, **kwargs)))
+        async with self._lock:
+            return await func(self, *args, **kwargs)
 
     return wrapper
 
 
 def lock_and_status(func):
     # lock, get status from server and run method
-    @asyncio.coroutine
-    def wrapper(self, *args, **kwargs):
+    async def wrapper(self, *args, **kwargs):
         if self._transport is None:
             log.error("connection closed")
             raise RuntimeError("connection closed")
 
-        with (yield from self._lock):
-            self._status = yield from self._get_status()
+        async with self._lock:
+            self._status = await self._get_status()
 
             res = func(self, *args, **kwargs)
-            if isinstance(res, GeneratorType):
-                return (yield from res)
+            if asyncio.iscoroutine(res):
+                return await res
             else:
                 return res
 
