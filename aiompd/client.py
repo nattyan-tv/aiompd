@@ -121,7 +121,7 @@ class Client:
 
     async def _get_status(self) -> Status:
         # Low-level get status from server, use 'get_status()' for
-        raw = (await self._send_command('status')).decode('utf8')
+        raw = (await self._send_command("status")).decode("unicode-escape")
         return status_from_raw(raw)
 
     @lock_and_status
@@ -134,7 +134,7 @@ class Client:
     async def current_song(self) -> Song:
         """ Return current song info.
         """
-        raw = (await self._send_command('currentsong')).decode('utf8')
+        raw = (await self._send_command("currentsong")).decode("unicode-escape")
         lines = raw.split('\n')[:-2]
         parsed = dict(l.split(': ', 1) for l in lines)
         return song_from_raw(parsed)
@@ -282,7 +282,7 @@ class Client:
     async def list(self, type_: str) -> List[str]:
         assert type_ in ('any', 'base', 'file', 'modified-since')
         response = await self._send_command('list', type_)
-        lines = response.decode('utf-8').split('\n')
+        lines = response.decode("unicode-escape").split("\n")
         files = [file_ for file_ in lines if file_.startswith('file: ')]
         return [file_.split(": ")[1].lstrip() for file_ in files]
 
