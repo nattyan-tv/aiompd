@@ -31,7 +31,7 @@ class Status(NamedTuple):
     songid: int
     nextsong: int
     nextsongid: int
-    duration: int
+    duration: float
     xfade: int
     updating_db: int
 

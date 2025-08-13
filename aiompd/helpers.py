@@ -48,6 +48,10 @@ def _str_int(v: str) -> Optional[int]:
     return int(v) if v else None
 
 
+def _str_float(v: str) -> Optional[float]:
+    return float(v) if v else None
+
+
 def status_from_raw(raw: str) -> Status:
     parsed = dict(l.split(': ', 1) for l in raw.split('\n')[:-2])
     return Status(
@@ -75,7 +79,7 @@ def status_from_raw(raw: str) -> Status:
         songid=_str_int(parsed.get('songid')),
         nextsong=_str_int(parsed.get('nextsong')),
         nextsongid=_str_int(parsed.get('nextsongid')),
-        duration=_str_int(parsed.get('duration')),
+        duration=_str_float(parsed.get('duration')),
         xfade=_str_int(parsed.get('xfade')),
         updating_db=_str_int(parsed.get('updating_db')),
     )
